@@ -17,7 +17,9 @@ const bodyValidator = (schema) => {
       let messageBag = {};
       // error is stored in path inside details key of the joi error object
       e.details.map((error) => {
+        // extract the field name from the error path (last iteam)
         let key = error.path.pop();
+        // create key value pair for the error object and add it to messageBag
         messageBag[key] = error.message;
       });
 

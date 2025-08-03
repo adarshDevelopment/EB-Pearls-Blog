@@ -13,5 +13,6 @@ router
   .get(blogController.show)
   .put(auth, requestValidator(UpdateBlogDTO), blogController.update)
   .delete(auth, blogController.destroy);
+  router.get('/list-comments/:id', blogController.listAllComments);
 
 module.exports = router;

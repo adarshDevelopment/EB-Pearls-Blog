@@ -1,3 +1,4 @@
+const commentService = require("../comment/comment.service");
 const blogService = require("./blog.service");
 
 class BlogController {
@@ -129,6 +130,25 @@ class BlogController {
         status: "Success",
         data: null,
         options: null,
+      });
+    } catch (exception) {
+      next(exception);
+    }
+  };
+
+  listAllComments = async (req, res, next) => {
+    try {
+      const _id = req.params.id;
+      const { data, pagination } = await commentService.listAllComments({
+        blog: _id,
+      });
+      res.status(200).json({
+        message: "Comments fetched for the entered blog",
+        status: "Success",
+        data: data,
+        options: {
+          pagination,
+        },
       });
     } catch (exception) {
       next(exception);
