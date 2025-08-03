@@ -30,7 +30,6 @@ class TagController {
   store = async (req, res, next) => {
     try {
       const data = await tagService.transformCreateData(req);
-      console.log("tag data: ", data);
       const tag = await tagService.createSingleRow(data);
       res.status(201).json({
         message: "Tag successfully created",

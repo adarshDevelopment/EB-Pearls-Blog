@@ -7,7 +7,8 @@ const AppConfig = {
 }
 
 const MongoDbConfig = {
-  mongoDbUrl: process.env.MONGODB_URL
+  mongoDbUrl: process.env.MONGODB_URL,
+  mongoDbLocal : process.env.MONGODB_LOCAL
 }
 
 module.exports = {

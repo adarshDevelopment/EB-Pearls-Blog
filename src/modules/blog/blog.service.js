@@ -28,6 +28,7 @@ class BlogService extends BaseService {
         generateRandomString(5),
       { lower: true, strict: true }
     );
+    data['slug']= slug;
 
     //  return data
     return data;
@@ -40,7 +41,7 @@ class BlogService extends BaseService {
       const limit = query.limit || 10;
       const skip = (currentPage - 1) * limit;
 
-      sortBy = query.sort === "desc" ? -1 : query.sort === "asc" ? 1 : -1;
+      const sortBy = query.sort === "desc" ? -1 : query.sort === "asc" ? 1 : -1;
 
       const data = await this.model
         .find(filter)
@@ -51,12 +52,13 @@ class BlogService extends BaseService {
         .sort({ createdAt: sortBy });
 
       // fetching total count
-      const totalCount = await this.model.coundDocuments(filter);
+      const totalCount = await this.model.countDocuments(filter);
 
       return {
         data,
         currentPage,
         limit,
+        totalCount,
         totalPages: Math.ceil(totalCount / limit), // round off the total value to find the total number of pages
       };
     } catch (exception) {
@@ -68,7 +70,8 @@ class BlogService extends BaseService {
   transformBlogUpdate = async (req, blog) => {
     // check if it is the same user
     const data = req.body;
-    if (blog._id !== req.loggedInUserId) {
+    console.log('logged In user: ', req.loggedInUserId, ' | blgo id: ', blog.user)
+    if (blog.user.toString() !== req.loggedInUserId) {
       throw {
         message: "You are not authorized to make changes to this blog.",
         code: 401,
@@ -88,4 +91,4 @@ class BlogService extends BaseService {
     return data;
   };
 }
-module.exports = new BaseService(BlogModel);
+module.exports = new BlogService(BlogModel);

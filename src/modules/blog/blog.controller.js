@@ -20,7 +20,6 @@ class BlogController {
     try {
       // initialize an empty filter object
       let filter = {};
-
       // put search keyowrd in the filter object if there is a search in query params
       if (req.query.search) {
         filter = {
@@ -30,13 +29,15 @@ class BlogController {
           ],
         };
       }
+
+      console.log("filter: ", filter);
       /*
         filter would look like this
           filter = {$or:[{title:....}], isActive: true}
       */
 
       //  fetch required data from the service function
-      const { data, currentPage, limit, totalPages } =
+      const { data, currentPage, limit, totalPages, totalCount } =
         await blogService.listAllBlogs(filter, req.query);
 
       res.status(200).json({
@@ -48,6 +49,7 @@ class BlogController {
             currentPage,
             limit,
             totalPages,
+            totalItems: totalCount,
           },
         },
       });
@@ -68,12 +70,15 @@ class BlogController {
       const data = await blogService.transformBlogUpdate(req, blog);
 
       // update blog
-      await blogService.updateSingleRowByFilter({ _id }, data);
+      const updatedBlog = await blogService.updateSingleRowByFilter(
+        { _id },
+        data
+      );
 
-      res.satus(201).json({
+      res.status(201).json({
         message: "Blog successfully updated",
         status: "Success",
-        data: blogService,
+        data: updatedBlog,
         options: null,
       });
     } catch (exception) {
@@ -104,7 +109,13 @@ class BlogController {
       const blog = await blogService.verifyData(_id);
 
       // check if the blog was created by the logged In User
-      if (blog.user !== req.loggedInUserId) {
+      console.log(
+        "loggedIn user: ",
+        req.loggedInUserId,
+        " | blog user: ",
+        blog.user
+      );
+      if (blog.user.toString() !== req.loggedInUserId) {
         throw {
           message: "Unauthorized. You cannot delete this blog",
           code: 401,
@@ -112,7 +123,7 @@ class BlogController {
       }
 
       // call the delete function on the blog instance
-      await blog.delete();
+      await blog.deleteOne();
       res.status(201).json({
         message: "Blog successfully deleted",
         status: "Success",

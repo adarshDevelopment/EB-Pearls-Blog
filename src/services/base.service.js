@@ -23,8 +23,8 @@ class BaseService {
   // function to verify if the record exists. returns the data if it exists
   verifyData = async (_id) => {
     try {
+      // console.log('id: ', _id, ' | model: ',this.model.modelName );
       const data = await this.model.findOne({ _id: _id });
-      console.log("data: ", data);
       if (!data) {
         throw {
           // display message saying the model name does not exist
