@@ -1,7 +1,5 @@
 const express = require("express");
 const router = require("./router.config");
-const dotevn = require("dotenv");
-dotevn.config();
 require("./mongodb.config");
 
 const app = express();
@@ -10,6 +8,16 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 
 app.use(router);
+
+// handler function to throw error message for non existent end points
+app.use((req, res, next) => {
+  next({
+    code: 404,
+    status: "NOT_FOUND",
+    message: "Resource not found",
+  });
+});
+
 
 // error catching middleware
 app.use((err, req, res, next) => {
@@ -25,4 +33,5 @@ app.use((err, req, res, next) => {
     status,
   });
 });
+
 module.exports = app;

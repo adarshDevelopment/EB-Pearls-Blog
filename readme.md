@@ -1,1 +1,14 @@
-# Program flwo
+# Program flow
+  - The entry point of the application is index.js which initializes the server using the port defined in the .env file
+  - Index.js is located in the root dicrectory and it takes an app instance which is returned by express() in the express.config.js filee
+  - It first goes throug the express.urlencoded middleware which is used for parsing urlencoded.
+  - the second middleware is a router instance defined in the router file and the final middleware is an error handling midldeware which cathces all the exception which may occur at runtime.
+  - the router instance defined in the router.config file takes appends the middlewares from all application modules.
+  - The routes defined in each module's router file are linked to their respective controllers. Before reaching the controller, some routes pass through an authentication middleware that verifies the masked JWT token by checking for a corresponding access token in the auths collection. If the verification is successful, the middleware calls the next handler and if not, it responds with an appropriate error. Auth is handled by jsonwebtoken package.
+  - Routes that handle POST requests validate incoming data using the Joi package before passing it to their respective controllers. Joi makes sure that the request payload meets the required schema and constraints
+  - Routes pass the request to the controllers, but most of the business logic is handled in service files, which extend a BaseService class containing common methods.
+  - Try catch blocks in the controller methods makes sure there are no errors at runtime and passes all exception to the error handling middleware.
+  - the middleware before the error handling middleware sends a custom error message for non existent routes.
+  - dotenv.config() is executed once in the confif file located in the config folder which loads and exports all enviornment variables across the application.
+  - mongose is initalized at the start of the program in the express.config file which references mongodb.config.js where an IIFE makes the mongodb connection
+  - slugify package is used to create slugs for blogs and bcrypt is used for hashing and verifyin passwords. Similarly nodemon is used in development server for instant hot reload. 
