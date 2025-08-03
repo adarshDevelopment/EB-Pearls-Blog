@@ -139,6 +139,7 @@ class BlogController {
   listAllComments = async (req, res, next) => {
     try {
       const _id = req.params.id;
+      // fetch comments whos blog is equal to the entered blog
       const { data, pagination } = await commentService.listAllComments({
         blog: _id,
       });
