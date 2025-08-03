@@ -11,4 +11,4 @@
   - the middleware before the error handling middleware sends a custom error message for non existent routes.
   - dotenv.config() is executed once in the config file located in the config folder which loads and exports all enviornment variables across the application.
   - mongose is initalized at the start of the program in the express.config file which references mongodb.config.js where an IIFE makes the mongodb connection
-  - slugify package is used to create slugs for blogs and bcrypt is used for hashing and verifying passwords. Similarly nodemon is used in development server for instant hot reload. 
+  - slugify package is used to create slugs for blogs and bcrypt is used for hashing and verifying passwords. Similarly nodemon is used in the development server to enable instant hot reload. 
